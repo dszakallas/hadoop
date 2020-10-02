@@ -1426,7 +1426,8 @@ public class DynamoDBMetadataStore implements MetadataStore {
         path);
     URI uri = path.toUri();
     Preconditions.checkNotNull(uri.getScheme(), "Path %s missing scheme", path);
-    Preconditions.checkArgument(uri.getScheme().equals(Constants.FS_S3A),
+    Preconditions.checkArgument(uri.getScheme().equals(Constants.FS_S3A) ||
+        uri.getScheme().equals("s3"),
         "Path %s scheme must be %s", path, Constants.FS_S3A);
     Preconditions.checkArgument(!StringUtils.isEmpty(uri.getHost()), "Path %s" +
         " is missing bucket.", path);
