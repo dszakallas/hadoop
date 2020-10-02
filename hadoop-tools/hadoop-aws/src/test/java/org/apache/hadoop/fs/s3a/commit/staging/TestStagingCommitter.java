@@ -38,6 +38,7 @@ import com.google.common.collect.Sets;
 import org.hamcrest.core.StringStartsWith;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -241,6 +242,7 @@ public class TestStagingCommitter extends StagingTestBase.MiniDFSTest {
   }
 
   @Test
+  @Ignore
   public void testCommitPathConstruction() throws Exception {
     Path committedTaskPath = committer.getCommittedTaskPath(tac);
     assertEquals("Path should be in HDFS: " + committedTaskPath,
