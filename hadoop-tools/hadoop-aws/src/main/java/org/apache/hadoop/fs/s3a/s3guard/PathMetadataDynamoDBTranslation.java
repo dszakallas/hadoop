@@ -109,7 +109,18 @@ final class PathMetadataDynamoDBTranslation {
    */
   static DDBPathMetadata itemToPathMetadata(Item item, String username)
       throws IOException {
-    return itemToPathMetadata(item, username, false);
+    return itemToPathMetadata(item, username, Constants.FS_S3A);
+  }
+
+  /**
+   * Converts a DynamoDB item to a {@link DDBPathMetadata}.
+   *
+   * @param item DynamoDB item to convert
+   * @return {@code item} converted to a {@link DDBPathMetadata}
+   */
+  static DDBPathMetadata itemToPathMetadata(Item item, String username, String scheme)
+          throws IOException {
+    return itemToPathMetadata(item, username, scheme, false);
   }
 
   /**
@@ -122,6 +133,21 @@ final class PathMetadataDynamoDBTranslation {
    * @return {@code item} converted to a {@link DDBPathMetadata}
    */
   static DDBPathMetadata itemToPathMetadata(Item item, String username,
+                                            boolean ignoreIsAuthFlag)
+          throws IOException {
+    return itemToPathMetadata(item, username, Constants.FS_S3A, ignoreIsAuthFlag);
+  }
+
+  /**
+   * Converts a DynamoDB item to a {@link DDBPathMetadata}.
+   * Can ignore {@code IS_AUTHORITATIVE} flag if {@code ignoreIsAuthFlag} is
+   * true.
+   *
+   * @param item DynamoDB item to convert
+   * @param ignoreIsAuthFlag if true, ignore the authoritative flag on item
+   * @return {@code item} converted to a {@link DDBPathMetadata}
+   */
+  static DDBPathMetadata itemToPathMetadata(Item item, String username, String scheme,
       boolean ignoreIsAuthFlag)
       throws IOException {
     if (item == null) {
@@ -139,7 +165,11 @@ final class PathMetadataDynamoDBTranslation {
       return null;
     }
 
-    Path parent = new Path("s3:/" + parentStr + "/");
+    if (scheme == null) {
+      scheme = Constants.FS_S3A;
+    }
+
+    Path parent = new Path(scheme + ":/" + parentStr + "/");
     Path path = new Path(parent, childStr);
 
     boolean isDir = item.hasAttribute(IS_DIR) && item.getBoolean(IS_DIR);

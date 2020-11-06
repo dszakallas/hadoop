@@ -170,9 +170,11 @@ public class TestPathMetadataDynamoDBTranslation extends Assert {
     final String user =
             UserGroupInformation.getCurrentUser().getShortUserName();
 
-    URI actual = itemToPathMetadata(pathMetadataToItem(testDirPathMetadata), user)
-                    .getFileStatus().getPath().toUri();
     URI expected = testDirPathMetadata.getFileStatus().getPath().toUri();
+
+    URI actual = itemToPathMetadata(pathMetadataToItem(testDirPathMetadata), user, expected.getScheme())
+                    .getFileStatus().getPath().toUri();
+
     assertEquals(expected, actual);
   }
 

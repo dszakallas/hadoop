@@ -558,7 +558,8 @@ public class DynamoDBMetadataStore implements MetadataStore {
           new DDBPathMetadata(makeDirStatus(username, path));
     } else {
       final Item item = getConsistentItem(path);
-      meta = itemToPathMetadata(item, username);
+      String scheme = path.toUri().getScheme();
+      meta = itemToPathMetadata(item, username, scheme);
       LOG.debug("Get from table {} in region {} returning for {}: {}",
           tableName, region, path, meta);
     }
@@ -620,7 +621,8 @@ public class DynamoDBMetadataStore implements MetadataStore {
 
           final List<PathMetadata> metas = new ArrayList<>();
           for (Item item : items) {
-            DDBPathMetadata meta = itemToPathMetadata(item, username);
+            String scheme = path.toUri().getScheme();
+            DDBPathMetadata meta = itemToPathMetadata(item, username, scheme);
             metas.add(meta);
           }
 
