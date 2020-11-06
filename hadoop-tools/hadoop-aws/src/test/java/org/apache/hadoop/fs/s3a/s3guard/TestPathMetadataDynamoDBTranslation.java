@@ -162,10 +162,18 @@ public class TestPathMetadataDynamoDBTranslation extends Assert {
   }
 
   @Test
-  public void testPathMetadataToItem() {
+  public void testPathMetadataToItem() throws IOException {
     verify(pathMetadataToItem(testDirPathMetadata), testDirPathMetadata);
     verify(pathMetadataToItem(testFilePathMetadata),
         testFilePathMetadata);
+
+    final String user =
+            UserGroupInformation.getCurrentUser().getShortUserName();
+
+    URI actual = itemToPathMetadata(pathMetadataToItem(testDirPathMetadata), user)
+                    .getFileStatus().getPath().toUri();
+    URI expected = testDirPathMetadata.getFileStatus().getPath().toUri();
+    assertEquals(expected, actual);
   }
 
   @Test
