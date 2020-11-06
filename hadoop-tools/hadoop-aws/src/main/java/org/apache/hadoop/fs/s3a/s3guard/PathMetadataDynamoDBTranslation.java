@@ -139,7 +139,7 @@ final class PathMetadataDynamoDBTranslation {
       return null;
     }
 
-    Path parent = new Path(Constants.FS_S3A + ":/" + parentStr + "/");
+    Path parent = new Path("s3:/" + parentStr + "/");
     Path path = new Path(parent, childStr);
 
     boolean isDir = item.hasAttribute(IS_DIR) && item.getBoolean(IS_DIR);
